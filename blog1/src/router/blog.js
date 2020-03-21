@@ -12,6 +12,13 @@ const handleBlogRouter = (req, res) => {
     const listData = getList(author, keyword)
     return new SuccessModel(listData)
   }
+  // 获取博客详情
+  if (method === 'GET' && req.path === '/api/blog/detail') {
+    const id = req.query.id
+    // 从数据库获取数据
+    const data = getList(id)
+    return new SuccessModel(data)
+  }
   // 新建一篇博客
   if (method === 'POST' && req.path === '/api/blog/new') {
     return {
