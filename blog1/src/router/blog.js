@@ -17,9 +17,11 @@ const handleBlogRouter = (req, res) => {
   }
   // 获取博客详情
   if (method === 'GET' && req.path === '/api/blog/detail') {
-    // 从数据库获取数据
-    const data = getDetail(id)
-    return new SuccessModel(data)
+    // 从数据库获取数据，注意返回的result为一个promise
+    const result = getDetail(id)
+    return result.then(data => {
+      return new SuccessModel(data)
+    })
   }
   // 新建一篇博客
   if (method === 'POST' && req.path === '/api/blog/new') {
