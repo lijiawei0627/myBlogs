@@ -46,7 +46,16 @@ const newBlog = (blogData = {}) =>{
 const updateBlog = (id, blogData = {}) => {
   // id就是要更新博客的id
   // blogData是一个博客对象，包含title和content属性
-  return true
+  const { title, content } = blogData
+  const sql = `
+      update blogs set title='${title}', content='${content}' where id=${id}
+  `
+  return exec(sql).then(updateData => {
+    if (updateData.affectedRows > 0) {
+      return true
+    }
+    return false
+  })
 }
 
 // 删除博客
