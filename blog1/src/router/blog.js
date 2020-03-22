@@ -24,16 +24,16 @@ const handleBlogRouter = (req, res) => {
     const data = newBlog(req.body)
     return new SuccessModel(data)
   }
-    // 更新一篇博客
-    if (method === 'POST' && req.path === '/api/blog/update') {
-      const result = updateBlog(id, req.body)
-      if (result) {
-        return new SuccessModel(result)
-      } else {
-        return new ErrorModel('更新博客失败')
-      }
+  // 更新一篇博客
+  if (method === 'POST' && req.path === '/api/blog/update') {
+    const result = updateBlog(id, req.body)
+    if (result) {
+      return new SuccessModel(result)
+    } else {
+      return new ErrorModel('更新博客失败')
     }
-      // 删除一篇博客
+  }
+  // 删除一篇博客
   if (method === 'POST' && req.path === '/api/blog/delete') {
     const result = delBlog(id)
     if (result) {
