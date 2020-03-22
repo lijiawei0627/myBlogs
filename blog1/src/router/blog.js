@@ -9,9 +9,11 @@ const handleBlogRouter = (req, res) => {
   if (method === 'GET' && req.path === '/api/blog/list') {
     const author = req.query.author || ''
     const keyword = req.query.keyword || ''
-    // 从数据库获取数据
-    const listData = getList(author, keyword)
-    return new SuccessModel(listData)
+    // 从数据库获取数据，注意返回的result为一个promise
+    const result = getList(author, keyword)
+    return result.then(listData => {
+      return new SuccessModel(listData)
+    })
   }
   // 获取博客详情
   if (method === 'GET' && req.path === '/api/blog/detail') {
