@@ -59,9 +59,15 @@ const updateBlog = (id, blogData = {}) => {
 }
 
 // 删除博客
-const delBlog = (id) => {
+const delBlog = (id, author) => {
   // id为要删除博客的id
-  return true
+  const sql = `delete from blogs where id='${id}' and author='${author}'`
+  return exec(sql).then(deleteData => {
+    if (deleteData.affectedRows > 0) {
+      return true
+    }
+    return false
+  })
 }
 module.exports = {
   getList,
