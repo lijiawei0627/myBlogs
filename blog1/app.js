@@ -1,5 +1,7 @@
 const querystring = require('querystring')
 const { get, set } = require('./src/db/redis')
+// 获取日志写入函数
+const { access } = require('./src/utils/log')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 
@@ -47,6 +49,8 @@ const getPostData = (req) => {
 }
 
 const serverHandle = (req, res) => {
+  // 记录 access log（访问日志）
+  access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`)
   // 设置返回格式 JSON
   res.setHeader('Content-type', 'application/json');
 
@@ -105,7 +109,8 @@ const serverHandle = (req, res) => {
       req.session = sessionData
     }
     // 处理post data
-    // 注意此处有异步操作，需等req.session处理完成之后，再执行后续代码
+    // 注意此处有异步操作，考虑到后续代码需要使用到req.session
+    // 需等req.session处理完成之后，再执行后续代码
     // 否则可能会造成req.session为undefined，而导致报错
     return getPostData(req)
   })
