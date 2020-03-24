@@ -20,11 +20,12 @@ function createWriteStream (fileName) {
 const accessWriteStream = createWriteStream('access.log')
 function access (log) {
   // 如果是线上环境则直接打印日志，否则将日志写入文件中
-  if (process.env.NODE_ENV === 'dev') {
-    console.log(log)
-  } else {
-    writeLog(accessWriteStream, log) 
-  }
+  // if (process.env.NODE_ENV === 'dev') {
+  //   console.log(log)
+  // } else {
+  //   writeLog(accessWriteStream, log) 
+  // }
+  writeLog(accessWriteStream, log) 
 }
 
 module.exports = {
