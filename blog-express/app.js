@@ -28,7 +28,7 @@ const sessionStore = new RedisStore({
   client: redisClient
 })
 // 查看该cookie存储的connect.sid是否存在于session中，如果存在则获取session给req.session，
-// 否则生成一个cookie，返回给用户，同时将session赋值为{cookie: {...}}
+// 否则生成一个cookie，返回给用户，同时将session赋值为{cookie: {...}} (cookie的一些配置)
 app.use(session({
   secret: 'WJiol#23123_', // 提供一个类似于密钥的作用
   cookie: {
