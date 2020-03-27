@@ -3,18 +3,17 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const session = require('express-session')
+const RedisStore = require('connect-redis')(session)
+const redisClient = require('./db/redis')
 
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
 const blogRouter = require('./routes/blog')
 const userRouter = require('./routes/user')
 
 // 初始化app实例
 var app = express();
 
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
+
 
 // 使用morgan日志插件
 app.use(logger('dev'));
@@ -24,6 +23,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // 注册cookieParse插件之后，可以直接通过req.cookies访问cookie
 app.use(cookieParser());
+
+const sessionStore = new RedisStore({
+  client: redisClient
+})
+// 查看该cookie存储的connect.sid是否存在于session中，如果存在则获取session给req.session，
+// 否则生成一个cookie，返回给用户，同时将session赋值为{cookie: {...}}
+app.use(session({
+  secret: 'WJiol#23123_', // 提供一个类似于密钥的作用
+  cookie: {
+    path: '/', // 默认为'/'
+    httpOnly: true,  // 默认为true
+    // 过期时间为24小时后
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  store: sessionStore // 会将session自动存储到redis中
+}))
+
 // 将public目录暴露出去，为应用程序提供静态文件
 // app.use(express.static(path.join(__dirname, 'public')));
 
