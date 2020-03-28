@@ -4,6 +4,9 @@ const loginCheck = require('../middleware/loginCheck')
 var express = require('express');
 var router = express.Router();
 
+// 注意：在除了app.use之外，其他的如get、post都不会匹配父路由
+// 例如：访问/api/blog/list 时，不会匹配app.get('/api')，但是会访问app.use('/api')
+
 router.get('/list', loginCheck, (req, res, next) => {
   // express中的req自带了query，不用再去手动解析query
   const author = req.query.author || ''
