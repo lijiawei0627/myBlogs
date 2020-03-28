@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var fs = require('fs')
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session')
@@ -16,7 +17,25 @@ var app = express();
 
 
 // 使用morgan日志插件
-app.use(logger('dev'));
+// 第一个参数规定格式（有多种格式选择，如果是线上环境，我们选择'combined'）
+// 第二个参数相关配置
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {
+  // 开发环境
+  app.use(logger('dev'));
+} else {
+  // 线上环境
+  const logFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(logFileName, {
+    flags: 'a'  // 追加内容，而非覆盖
+  })
+  app.use(logger('combined', {
+    stream: writeStream  // 将日志写入到access.log文件中
+  }))
+}
+// app.use(logger('dev', {
+//   stream: process.stdout  // 默认参数，输出到控制台
+// }));
 // 将post请求中的JSON格式的数据赋给req.body。使得我们可以通过req.body直接访问。
 app.use(express.json());
 // 兼容post请求中的其他格式的数据，同样存放到req.body中
