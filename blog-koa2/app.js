@@ -13,6 +13,8 @@ const users = require('./routes/users')
 const blog = require('./routes/blog')
 const user = require('./routes/user')
 
+const { REDIS_CONF } = require('./conf/db')
+
 // 错误监测
 onerror(app)
 
@@ -49,7 +51,8 @@ app.use(session({
   },
   // 配置redis
   store: redisStore({
-    all: '127.0.0.1:6379'  // 暂时写死本地redis的server，线上根据实际情况而定
+    // all: '127.0.0.1:6379'  // 暂时写死本地redis的server，线上根据实际情况而定
+    all: `${REDIS_CONF}:${REDIS_CONF.port}`
   })
 }))
 
