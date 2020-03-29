@@ -1,5 +1,7 @@
 const router = require('koa-router')()
 
+
+// ctx为req、res的集合体，next与express差不多
 router.get('/', async (ctx, next) => {
   await ctx.render('index', {
     title: 'Hello Koa 2!'
