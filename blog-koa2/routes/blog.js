@@ -1,6 +1,7 @@
 const { getList, getDetail, newBlog, updateBlog, delBlog } = require('../controller/blog')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const loginCheck = require('../middleware/loginCheck')
+// koa中router和koa是分离的，使用koa-router来提供路由功能
 const router = require('koa-router')()
 
 // 路由前缀
