@@ -23,7 +23,7 @@ router.get('/detail', async (ctx, next) => {
   ctx.body = new SuccessModel(data)
 })
 
-router.post('/new', loginCheck, async (req, res, next) => {
+router.post('/new', loginCheck, async (ctx, next) => {
   const body = ctx.reqest.body
   body.author = ctx.session.username
   const data = await newBlog(body)
@@ -31,7 +31,7 @@ router.post('/new', loginCheck, async (req, res, next) => {
 })
   
 // 更新一篇博客
-router.post('/update', loginCheck, (req, res, next) => {
+router.post('/update', loginCheck, async(ctx, next) => {
   const val = await updateBlog(ctx.query.id, ctx.request.body)
   if (val) {
     ctx.body = new SuccessModel()
@@ -40,7 +40,7 @@ router.post('/update', loginCheck, (req, res, next) => {
   }
 })
 // 删除一篇博客
-router.post('/delete', loginCheck, (req, res, next) => {
+router.post('/delete', loginCheck, async(ctx, next) => {
   const author = ctx.session.username
   const val = await delBlog(req.query.id, author)
   if (val) {

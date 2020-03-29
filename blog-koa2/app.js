@@ -7,6 +7,9 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
+const path = require('path')
+const fs = require('fs')
+const morgan = require('koa-morgan')
 
 const blog = require('./routes/blog')
 const user = require('./routes/user')
@@ -21,8 +24,10 @@ app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
 app.use(json())
-// 日志插件
+
+// 日志插件，优化打印格式，没有记录日志的功能
 app.use(logger())
+
 // 将public目录暴露出去，为应用程序提供静态文件
 app.use(require('koa-static')(__dirname + '/public'))
 
@@ -53,6 +58,24 @@ app.use(session({
     all: `${REDIS_CONF}:${REDIS_CONF.port}`
   })
 }))
+
+// 使用koa-morgan日志插件
+// 第一个参数规定格式（有多种格式选择，如果是线上环境，我们选择'combined'）
+// 第二个参数相关配置
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {
+  // 开发环境
+  app.use(morgan('dev'));
+} else {
+  // 线上环境
+  const logFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(logFileName, {
+    flags: 'a'  // 追加内容，而非覆盖
+  })
+  app.use(morgan('combined', {
+    stream: writeStream  // 将日志写入到access.log文件中
+  }))
+}
 
 // routes
 app.use(blog.routes(), blog.allowedMethods())
