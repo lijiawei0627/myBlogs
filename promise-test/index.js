@@ -15,16 +15,32 @@ function getFileContent (fileName) {
   })
   return promise
 }
-getFileContent('a.json')
-.then(aData => {
-  console.log('a.data', aData)
-  return getFileContent(aData.next)
-}, err => console.log(err))
-.then(bData => {
-  console.log(bData);
-  return getFileContent(bData.next)
-})
-.then(cData => console.log(cData))
+
+// async/await方式获取文件内容
+async function readFileData () {
+  const aData = await getFileContent('a.json')
+  console.log('aData', aData)
+  const bData = await getFileContent(aData.next)
+  console.log('bData', bData)
+  const cData = await getFileContent(bData.next)
+  console.log('cData', cData)
+}
+readFileData()
+
+
+
+// promise方式获取文件内容
+// getFileContent('a.json')
+// .then(aData => {
+//   console.log('a.data', aData)
+//   return getFileContent(aData.next)
+// }, err => console.log(err))
+// .then(bData => {
+//   console.log(bData);
+//   return getFileContent(bData.next)
+// })
+// .then(cData => console.log(cData))
+
 
 // // callback方式获取一个文件的内容
 // function getFileContent (fileName, callback) {

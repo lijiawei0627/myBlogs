@@ -63,8 +63,6 @@ app.use(session({
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // 注册路由
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
 app.use('/api/blog', blogRouter);
 app.use('/api/user', userRouter);
 
